@@ -67,7 +67,7 @@ int main()
 void LinkedList::insert(int data) {
     Node *node = new Node;
     node->data = data;
-    node->next = NULL;
+    tail->next = node;
     tail = node;
     cout << "\nInserted a node at the end." << endl;
     main();
@@ -83,6 +83,13 @@ void LinkedList::insert(int data) {
 void LinkedList::insertAt(int pos, int data) {
     Node *node = new Node;
     node->data = data;
+
+    if (pos == 1) {
+        node->data = data;
+        node->next = head;
+        head = node;
+        return;
+    }
 
     long count = 1;
     for (Node *i = head ; i ; i = i->next) {
