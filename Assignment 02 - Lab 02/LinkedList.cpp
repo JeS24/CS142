@@ -95,7 +95,7 @@ void LinkedList::insert(int data) {
 // Function to insert data ("data") at a certain position ("pos") in the **ALREADY EXISITING** LinkedList
 void LinkedList::insertAt(int pos, int data) {
     if (!pos || countItems() < pos) { // if pos == 0, !pos returns 'true, else it returns false.
-        cout << "\nNo such position exists in the list. Aborting..." << endl;
+        cout << "\nLinked List does not have that many elements. Aborting..." << endl;
         return;
     }
     else {
@@ -137,7 +137,7 @@ void LinkedList::Delete() {
 
 void LinkedList::deleteAt(int pos) {
     if (!pos || countItems() < pos) {
-        cout << "\nNo such position exists in the list. Aborting..." << endl;
+        cout << "\nLinked List does not have that many elements. Aborting..." << endl;
         return;
     }
     else if (pos == 1)
