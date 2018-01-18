@@ -5,18 +5,27 @@ class Node {
     public:
         long data;
         Node *next;
+
+    Node() {
+        data = RAND_MAX; // Need to replace this, using LONG_MAX or something
+        next = NULL;
+    }
 };
 
 class LinkedList {
+    // Declaring member variables and member functions
     public:
+    /* head = First Node in the list
+     * tail = Last Node in the list
+     */
         Node *head, *tail;
 
         LinkedList();
         void insert(int data);
         void insertAt(int pos, int data);
-        void delet();
+        void Delete();
         void deleteAt(int pos);
-        void countItems();
+        long countItems();
         void display();
 };
 
@@ -25,95 +34,111 @@ LinkedList::LinkedList() {
     tail = NULL;
 }
 
+// Declaring 'main()' function ................. TBC
 int main()
 {
-    LinkedList *obj = new LinkedList;
+    LinkedList *obj = new LinkedList; // Creating a new List Object to access data from the list
     short choice = 0;
-    cout << "\nSelect an option:\n\n1. Insert an element at the end\n2. Insert an element at a particular position\n3. Delete the element at the end\n4. Delete the element at a particular position\n5. Query the number of items in the list\n6. Display the List\n\nYour selection: ";
-    cin >> choice;
-    switch (choice)
-    {
-        case 1: {
-            int data = 0;
-            cout << "Enter the data (integer) to insert at the end of the List: ";
-            cin >> data;
-            obj->insert(data);
-            break;
+    while (true) {
+        cout << "\nSelect an option:\n\n1. Insert an element at the end\n2. Insert an element at a particular position\n3. Delete the element at the end\n4. Delete the element at a particular position\n5. Query the number of items in the list\n6. Display the List\n7. Exit\n\nYour selection: ";
+        cin >> choice;
+        switch (choice)
+        {
+            case 1: {
+                int data = 0;
+                cout << "Enter the data (integer) to insert at the end of the List: ";
+                cin >> data;
+                obj->insert(data);
+                break;
+            }
+            case 2: {
+                int data = 0, pos = 0;
+                cout << "Enter the data (integer) to insert in the List: ";
+                cin >> data;
+                cout << "\nEnter the position, at which you want to insert the data: ";
+                cin >> pos;
+                obj->insertAt(pos, data);
+                break;
+            }
+            case 3: obj-> Delete(); break;
+            case 4: {
+                int pos = 0;
+                cout << "\nEnter the position, at which you want to delete the element: ";
+                cin >> pos;
+                obj->deleteAt(pos);
+                break;
+            }
+            case 5: cout << "\nNumber of items, in the list: " << obj->countItems() << "." << endl; break;
+            case 6: obj->display(); break;
+            case 7: cout << "\nExiting the program..." << endl; return 1; //Normal program termination
+            default: cout << "\nWrong input! Please enter your choice again!" << endl;
         }
-        case 2: {
-            int data = 0, pos = 0;
-            cout << "Enter the data (integer) to insert in the List: ";
-            cin >> data;
-            cout << "\nEnter the position, at which you want to insert the data: ";
-            cin >> pos;
-            obj->insertAt(pos, data);
-            break;
-        }
-        case 3: obj-> delet(); break;
-        case 4: {
-            int pos = 0;
-            cout << "\nEnter the position, at which you want to delete the element: ";
-            cin >> pos;
-            obj->deleteAt(pos);
-            break;
-        }
-        case 5: obj->countItems(); break;
-        case 6: obj->display(); break;
-        default: cout << "\nWrong input! Please run the program again!" << endl;
     }
 }
 
-//Function to insert data ("data") at the end of the LinkedList
+// Function to insert data ("data") at the end of the LinkedList
 void LinkedList::insert(int data) {
     Node *node = new Node;
     node->data = data;
-    tail->next = node;
-    tail = node;
+    if (!head) { // if head == NULL; !head != NULL or !head == true
+        head = node;
+        head->next = NULL;
+        tail = head;
+    }
+    else {
+        tail->next = node;
+        tail = node;
+    }
     cout << "\nInserted a node at the end." << endl;
-    main();
-    /**
-    for (Node *i = head ; i ; i = i->next) {
-        if (!(i->next)) //if i->next == NULL, then "! of that" should give 'true', else 'false'
-            i->next = node;
-            node->next = tail;
-    }*/
 }
 
-//Function to insert data ("data") at a certain position ("pos") in the LinkedList
+// Function to insert data ("data") at a certain position ("pos") in the ****ALREADY EXISITING**** LinkedList
 void LinkedList::insertAt(int pos, int data) {
-    Node *node = new Node;
-    node->data = data;
-
-    if (pos == 1) {
-        node->data = data;
-        node->next = head;
-        head = node;
+    if (pos == 0 || countItems() < pos) {
+        cout << "\nNo such position exists in the list. Aborting..." << endl;
         return;
     }
+    else {
+        Node *node = new Node;
+        node->data = data;
 
-    long count = 1;
-    for (Node *i = head ; i ; i = i->next) {
-        if (count == (pos-1)) {
-            node->next = i->next;
-            i->next = node;
-            break;
+        if (pos == 1) {
+            node->next = head->next;
+            head = node;
+            return;
         }
-        count++;
-    }
-    if (count > pos)
-        cout << "No such position exists in the list. Aborting..." << endl;
-    else
+        else {
+            long count = 1;
+            for (Node *i = head ; i ; i = i->next) {
+                if (count == (pos-1)) {
+                    node->next = i->next;
+                    i->next = node;
+                    break;
+                }
+                count++;
+            }
+        }
         cout << "\nInserted a node at position " << pos << "." << endl;
-    main();
+    }
 }
 
-void LinkedList::delet() {
-    Node *i = head;
-    for ( ; i->next ; i = i->next);
-    i->next = NULL;
-    tail = i;
-    cout << "\nDeleted the node at the end." << endl;
-    main();
+void LinkedList::Delete() {
+    if (head == NULL) { // Or, use < !countItems() > : countItems() must return 0 (i.e. The list is empty) for < !countItems() > to return 'true'
+        cout << "\nThe list is empty. Nothing to delete! Aborting...\n";
+        return;
+    }
+    else if (head->next == NULL) { // If the List has exactly 1 node
+        head = NULL;
+        goto JUMP_HERE;
+    }
+    else { // If the list has > 2 nodes
+        Node *i = head;
+        for ( ; i->next->next ; i = i->next);
+        i->next = NULL;
+        tail = i;
+        goto JUMP_HERE;
+    }
+    JUMP_HERE: cout << "\nDeleted the node at the end." << endl;
 }
 
 void LinkedList::deleteAt(int pos) {
@@ -130,24 +155,18 @@ void LinkedList::deleteAt(int pos) {
         cout << "No such position exists in the list. Aborting..." << endl;
     else
         cout << "\nDeleted a node at position " << pos << "." << endl;
-    main();
 }
 
-void LinkedList::countItems() {
+long LinkedList::countItems() {
     long count = 0;
     for (Node *i = head ; i ; i = i->next)
         count++;
-    cout << "\nNumber of items, in the list: " << count << "." << endl;
-    main();
+    return count;
 }
 
 void LinkedList::display() {
     cout << "\nPrinting all the elements in the list: \n" << endl;
-    for (Node *i = head ; i ; i = i->next) {
-        if (i->next)
-            cout << i->data << " -> ";
-        else
-            cout << "NULL" << endl;
-    }
-    main();
+    for (Node *i = head ; i ; i = i->next)
+        cout << i->data << " -> ";
+    cout << "NULL" << endl;
 }
