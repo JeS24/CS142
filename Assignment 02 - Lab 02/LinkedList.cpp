@@ -34,13 +34,13 @@ LinkedList::LinkedList() {
     tail = NULL;
 }
 
-// Declaring 'main()' function ................. TBC
+// Declaring 'main()' function - Acts as a central hub for the program - Presents the Interface as well as calls related functions
 int main()
 {
     LinkedList *obj = new LinkedList; // Creating a new List Object to access data from the list
     short choice = 0;
     while (true) {
-        cout << "\nSelect an option:\n\n1. Insert an element at the end\n2. Insert an element at a particular position\n3. Delete the element at the end\n4. Delete the element at a particular position\n5. Query the number of items in the list\n6. Display the List\n7. Exit\n\nYour selection: ";
+        cout << "\nSelect an option:\n\n1. Insert an element at the end\n2. Insert an element at a particular position (*Subject to existence of the list)\n3. Delete the element at the end\n4. Delete the element at a particular position\n5. Query the number of items in the list\n6. Display the List\n7. Exit\n\nYour selection: ";
         cin >> choice;
         switch (choice)
         {
@@ -92,9 +92,9 @@ void LinkedList::insert(int data) {
     cout << "\nInserted a node at the end." << endl;
 }
 
-// Function to insert data ("data") at a certain position ("pos") in the ****ALREADY EXISITING**** LinkedList
+// Function to insert data ("data") at a certain position ("pos") in the **ALREADY EXISITING** LinkedList
 void LinkedList::insertAt(int pos, int data) {
-    if (pos == 0 || countItems() < pos) {
+    if (!pos || countItems() < pos) { // if pos == 0, !pos returns 'true, else it returns false.
         cout << "\nNo such position exists in the list. Aborting..." << endl;
         return;
     }
@@ -102,21 +102,15 @@ void LinkedList::insertAt(int pos, int data) {
         Node *node = new Node;
         node->data = data;
 
-        if (pos == 1) {
-            node->next = head->next;
+        if (pos) { // Originally intended as < if (pos == 1) >. But not really needed, as 1 <=> true <=> !0.
+            node->next = head;
             head = node;
-            return;
         }
         else {
-            long count = 1;
-            for (Node *i = head ; i ; i = i->next) {
-                if (count == (pos-1)) {
-                    node->next = i->next;
-                    i->next = node;
-                    break;
-                }
-                count++;
-            }
+            Node *i = head;
+            for (long count = 1 ; count < pos ; i = i->next, count++);
+            node->next = i->next;
+            i->next = node;
         }
         cout << "\nInserted a node at position " << pos << "." << endl;
     }
@@ -129,7 +123,7 @@ void LinkedList::Delete() {
     }
     else if (head->next == NULL) { // If the List has exactly 1 node
         head = NULL;
-        goto JUMP_HERE;
+        goto JUMP_HERE; // Not a very elegant solution, but works fine and doesn't increase the logical complexity by much (Negligible, in fact)
     }
     else { // If the list has > 2 nodes
         Node *i = head;
@@ -142,19 +136,19 @@ void LinkedList::Delete() {
 }
 
 void LinkedList::deleteAt(int pos) {
-    long count = 1;
-    for (Node *i = head ; i ; i = i->next) {
-        if (count == (pos-1)) {
-            i->next = i->next->next;
-            i->next->next = NULL ;
-            break;
-        }
-        count++;
-    }
-    if (count > pos)
+    if (!pos || countItems() < pos) {
         cout << "No such position exists in the list. Aborting..." << endl;
-    else
+        return;
+    }
+    else if (pos == 1)
+        head = head->next;
+    else {
+        Node *i = head;
+        long count = 1;
+        for ( ; count < pos-1 ; i = i->next, count++);
+        i->next = i->next->next;
         cout << "\nDeleted a node at position " << pos << "." << endl;
+    }
 }
 
 long LinkedList::countItems() {
