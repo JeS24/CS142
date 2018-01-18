@@ -46,14 +46,14 @@ int main()
         {
             case 1: {
                 int data = 0;
-                cout << "Enter the data (integer) to insert at the end of the List: ";
+                cout << "Enter the element (integer) to insert at the end of the List: ";
                 cin >> data;
                 obj->insert(data);
                 break;
             }
             case 2: {
                 int data = 0, pos = 0;
-                cout << "Enter the data (integer) to insert in the List: ";
+                cout << "Enter the element (integer) to insert in the List: ";
                 cin >> data;
                 cout << "\nEnter the position, at which you want to insert the data: ";
                 cin >> pos;
@@ -89,7 +89,7 @@ void LinkedList::insert(int data) {
         tail->next = node;
         tail = node;
     }
-    cout << "\nInserted a node at the end." << endl;
+    cout << "\nInserted an element at the end." << endl;
 }
 
 // Function to insert data ("data") at a certain position ("pos") in the **ALREADY EXISITING** LinkedList
@@ -112,7 +112,7 @@ void LinkedList::insertAt(int pos, int data) {
             node->next = i->next;
             i->next = node;
         }
-        cout << "\nInserted a node at position " << pos << "." << endl;
+        cout << "\nInserted an element at position " << pos << "." << endl;
     }
 }
 
@@ -132,7 +132,7 @@ void LinkedList::Delete() {
         tail = i;
         goto JUMP_HERE;
     }
-    JUMP_HERE: cout << "\nDeleted the node at the end." << endl;
+    JUMP_HERE: cout << "\nDeleted the element at the end." << endl;
 }
 
 void LinkedList::deleteAt(int pos) {
@@ -147,7 +147,7 @@ void LinkedList::deleteAt(int pos) {
         long count = 1;
         for ( ; count < pos-1 ; i = i->next, count++);
         i->next = i->next->next;
-        cout << "\nDeleted a node at position " << pos << "." << endl;
+        cout << "\nDeleted an element at position " << pos << "." << endl;
     }
 }
 
