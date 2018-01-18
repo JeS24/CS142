@@ -70,7 +70,7 @@ int main()
             }
             case 5: cout << "\nNumber of items, in the list: " << obj->countItems() << "." << endl; break;
             case 6: obj->display(); break;
-            case 7: cout << "\nExiting the program..." << endl; return 1; //Normal program termination
+            case 7: cout << "\nExiting the program...\n" << endl; return 1; //Normal program termination
             default: cout << "\nWrong input! Please enter your choice again!" << endl;
         }
     }
@@ -102,13 +102,13 @@ void LinkedList::insertAt(int pos, int data) {
         Node *node = new Node;
         node->data = data;
 
-        if (pos) { // Originally intended as < if (pos == 1) >. But not really needed, as 1 <=> true <=> !0.
+        if (pos == 1) { // Originally intended as < if (pos == 1) >. But not really needed, as 1 <=> true <=> !0.
             node->next = head;
             head = node;
         }
         else {
             Node *i = head;
-            for (long count = 1 ; count < pos ; i = i->next, count++);
+            for (long count = 2 ; count < pos ; i = i->next, count++);
             node->next = i->next;
             i->next = node;
         }
@@ -137,7 +137,7 @@ void LinkedList::Delete() {
 
 void LinkedList::deleteAt(int pos) {
     if (!pos || countItems() < pos) {
-        cout << "No such position exists in the list. Aborting..." << endl;
+        cout << "\nNo such position exists in the list. Aborting..." << endl;
         return;
     }
     else if (pos == 1)
