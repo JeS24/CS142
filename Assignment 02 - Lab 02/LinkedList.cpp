@@ -192,7 +192,7 @@ long LinkedList::countItems() {
 
 // Function, to print out the elements, present inside the nodes of the list
 void LinkedList::display() {
-    cout << "\nPrinting all the elements in the list: \n" << endl;
+    cout << "\nPrinting all the elements in the list ('NULL' represents the ending of the list): \n" << endl;
     for (Node *i = head ; i ; i = i->next) // Standard list-traversal loop
         cout << i->data << " -> "; // Printing out the elements
     cout << "NULL" << endl; // Appends a "NULL" at the end to signify the ending of the list
