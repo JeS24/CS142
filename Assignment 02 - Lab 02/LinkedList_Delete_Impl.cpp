@@ -49,7 +49,7 @@ int main()
     short choice = 0; // Stores the 'choice' of the user
     while (true) { // The interface is displayed, until the user selects 'Exit'
         // Displaying options to the user
-        cout << "\nSelect an option:\n\n1. Insert an element at the end\n2. Insert an element at a particular position (*Subject to existence of the list)\n3. Delete the element at the end\n4. Delete the element at a particular position (*Subject to existence of the list)\n5. Query the number of items in the list\n6. Display the List\n7. Exit\n\nYour selection: ";
+        cout << "\nSelect an option:\n\n1. Insert an element at the end\n2. Insert an element at a particular position (*Subject to existence of the list)\n3. Delete the element at the end\n4. Delete the element at a particular position\n5. Query the number of items in the list\n6. Display the List\n7. Exit\n\nYour selection: ";
         cin >> choice; // Taking input
         switch (choice)
         {
@@ -148,15 +148,17 @@ void LinkedList::Delete() {
     }
     // If the list has exactly 1 node
     else if (head->next == NULL) {
-        head = NULL; // Setting 'head' to NULL resets the list, thereby removing all the nodes (In this case, it's just 1 node)
+        delete head; // Deleting the first node itself
+        head = NULL; // Setting 'head' to NULL resets the list, thereby removing all the nodes
         goto JUMP_HERE; // Just to avoid writing the output statement twice
     }
     // If the list has >= 2 nodes
     else {
         Node *i = head; // Local variable, to traverse the list
         for ( ; i->next->next ; i = i->next); // Loop, to move 'i' to exactly 1 position behind the last node (which is to be deleted)
-        i->next = NULL; // Unlinks the (current) last node from the list
-        tail = i; // The new 'tail' of the list
+        delete i->next; // Deletes the last node from the list
+        i->next = NULL; // Setting 'i->next' to NULL to avoid leaving it "dangling"
+        tail = i; // The new 'tail' (last node) of the list
         goto JUMP_HERE; // CODER'S NOTE: Not a very elegant solution, but works fine and doesn't increase the logical complexity by much (Negligible, in fact)
     }
     JUMP_HERE: cout << "\nDeleted the element at the end." << endl; // Signifies successful completion of the required operation
@@ -171,15 +173,17 @@ void LinkedList::deleteAt(int pos) {
     }
     // If the element/node is at position == 1
     else if (pos == 1) {
+        delete head; // Deleting 'head' deletes the first element (Or, element at position == 1)
         head = head->next; // Shifting 'head' to the 'next' node in the list -> The first element's link with the list is broken now.
         goto JUMP_HERE; // Just to avoid writing the output statement twice
     }
     // If the element/node is at a position > 1
     else {
-        Node *i = head; // Local variable, to traverse the list
+        Node *i = head; // Local pointer variable to store address temporarily
         long count = 1; // Stores the "index" of the current element/node (denoted by 'i')
         for ( ; count < pos-1 ; i = i->next, count++); // Loop, to move 'i' to exactly 1 position behind the desired node (which is to be deleted)
-        i->next = i->next->next; // Unlinking the 'current' node from the 'next' node (which is to be deleted) - This breaks the link between the 'next' node and the list (However, it's not completely gone from the working memory)
+        delete i->next; // Deleting 'i->next' - the element, required to be deleted
+        i->next = i->next->next; // Setting 'i->next' to 'i->next->next' to avoid leaving it "dangling" as well as, to keep the list together (intact)
         goto JUMP_HERE;
     }
     JUMP_HERE: cout << "\nDeleted an element at position " << pos << "." << endl; // Signifies successful completion of the required operation
