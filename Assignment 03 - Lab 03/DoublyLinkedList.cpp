@@ -28,12 +28,13 @@ class LinkedList {
         // Description of the function is present, just before the function definition
         LinkedList();
         // Declaring function prototypes
-        void insert(int data);
-        void insertAt(int pos, int data);
+        void insert(long data);
+        void insertAt(int pos, long data);
         void Delete();
         void deleteAt(int pos);
         long countItems();
         void display();
+        void displayRev();
 };
 
 // Default Constructor
@@ -50,7 +51,7 @@ int main()
     short choice = 0; // Stores the 'choice' of the user
     while (true) { // The interface is displayed, until the user selects 'Exit'
         // Displaying options to the user
-        cout << "\nSelect an option:\n\n1. Insert an element at the end\n2. Insert an element at a particular position (*Subject to existence of the list)\n3. Delete the element at the end\n4. Delete the element at a particular position\n5. Query the number of items in the list\n6. Display the List\n7. Exit\n\nYour selection: ";
+        cout << "\nSelect an option:\n\n1. Insert an element at the end\n2. Insert an element at a particular position (*Subject to existence of the list)\n3. Delete the element at the end\n4. Delete the element at a particular position (*Subject to existence of the list)\n5. Query the number of items in the list\n6. Display the List\n7. Display the list in reverse\n8. Exit\n\nYour selection: ";
         cin >> choice; // Taking input
         switch (choice)
         {
@@ -86,7 +87,8 @@ int main()
             // Displays the entire list
             case 6: obj->display(); break;
             // Normal Program Termination
-            case 7: cout << "\nExiting the program...\n" << endl; return 1;
+            case 7: obj->displayRev(); break;
+            case 8: cout << "\nExiting the program...\n" << endl; return 1;
             // In case, the input doesn't lie between 1 to 7 (Case of wrong input)
             default: cout << "\nWrong input! Please enter your choice again!" << endl;
         }
@@ -94,7 +96,7 @@ int main()
 } // End of main()
 
 // Function to insert data ("data") at the end of the LinkedList
-void LinkedList::insert(int data) {
+void LinkedList::insert(long data) {
     Node *node = new Node; // Creating a temporary node
     node->data = data; // Inserting the supplied data into the node
 
@@ -102,21 +104,21 @@ void LinkedList::insert(int data) {
     if (!head) { // if head == NULL; !head != NULL or !head == true
         head = node; // Actual insertion takes place here
         head->next = NULL;
-        head->prev = NULL; // **** TEST REMOVING THIS
         tail = head; // Setting 'tail' to 'head', as there's only one node in the list
     }
     // In case, the list contains at least 1 element
     else {
-        tail->next = node; // Actual insertion takes place here
-        node->prev = tail; // ****
+        // Actual insertion takes place in the following lines
+        tail->next = node;
+        node->prev = tail;
         tail = node; // Shifting 'tail' to the newly inserted node
     }
     cout << "\nInserted an element at the end." << endl; // Signifies successful completion of the required operation
 }
 
 // Function to insert data ("data") at a certain position ("pos") in the **ALREADY EXISITING** LinkedList
-void LinkedList::insertAt(int pos, int data) {
-    // if pos == 0, !pos returns 'true, else it returns false
+void LinkedList::insertAt(int pos, long data) {
+    // if pos == 0, !pos returns 'true', else it returns 'false'
     if (!pos || countItems() < pos) {
         cout << "\nLinked List does not have that many elements. Aborting..." << endl; // Displaying error-message
         return; // Leaving the function - Returning to main()
@@ -126,9 +128,9 @@ void LinkedList::insertAt(int pos, int data) {
         node->data = data; // Inserting the supplied data into the node
 
         // Insertion at position == 1
-        if (pos == 1) { // CODER'S NOTE: Originally intended as < if (pos == 1) >. But not really needed, as 1 <=> true <=> !0.
+        if (pos == 1) {
             node->next = head; // Actual insertion takes place here
-            node->prev = NULL; // **** TEST REMOVING THIS
+            head->prev = node;
             head = node; // Setting 'head' to 'node', as the newly inserted node is the first node now
         }
         // Insertion at position > 1
@@ -136,9 +138,12 @@ void LinkedList::insertAt(int pos, int data) {
             Node *i = head; // Local variable, to traverse the list
             // 'count' starts at 2, as position == 1 has already been accounted for
             for (long count = 2 ; count < pos ; i = i->next, count++); // Loop, to move 'i' to exactly 1 position behind the desired node (where insertion is to take place)
-            node->next = i->next; // Actual insertion takes place here (and the next line)
-            node->prev = i; // ****
-            i->next = node; // Linking the newly inserted node with the beginning portion of the list
+            // Actual insertion takes place in the following lines
+            node->next = i->next;
+            node->prev = i;
+            // Linking the newly inserted node with the rest of the list
+            i->next->prev = node;
+            i->next = node;
         }
         cout << "\nInserted an element at position " << pos << "." << endl; // Signifies successful completion of the required operation
     }
@@ -154,19 +159,18 @@ void LinkedList::Delete() {
     // If the list has exactly 1 node
     else if (head->next == NULL) {
         delete head; // Deleting the first node itself
-        head = NULL; // Setting 'head' to NULL resets the list, thereby removing all the nodes
-        goto JUMP_HERE; // Just to avoid writing the output statement twice
+        head = NULL; // Setting 'head' to NULL resets the list, thereby removing all the nodes (Also to not leave it "dangling")
+        tail = NULL; // Needed to ensure reverse-traversal functions properly
     }
     // If the list has >= 2 nodes
     else {
         Node *i = head; // Local variable, to traverse the list
-        for ( ; i->next->next ; i = i->next); // Loop, to move 'i' to exactly 1 position behind the last node (which is to be deleted)
-        delete i->next; // Deletes the last node from the list
-        i->next = NULL; // Setting 'i->next' to NULL to avoid leaving it "dangling"
-        tail = i; // The new 'tail' (last node) of the list
-        goto JUMP_HERE; // CODER'S NOTE: Not a very elegant solution, but works fine and doesn't increase the logical complexity by much (Negligible, in fact)
+        for ( ; i->next ; i = i->next); // Loop, to move 'i' to the last node (which is to be deleted)
+        tail = i->prev; // The new 'tail' (last node) of the list
+        tail->next = NULL;
+        delete i; // Deletes the last node (as required) from the list
     }
-    JUMP_HERE: cout << "\nDeleted the element at the end." << endl; // Signifies successful completion of the required operation
+    cout << "\nDeleted the element at the end." << endl; // Signifies successful completion of the required operation
 }
 
 // Function, to delete any particular node, existing at a position in the list
@@ -178,21 +182,37 @@ void LinkedList::deleteAt(int pos) {
     }
     // If the element/node is at position == 1
     else if (pos == 1) {
-        delete head; // Deleting 'head' deletes the first element (Or, element at position == 1)
-        head = head->next; // Shifting 'head' to the 'next' node in the list -> The first element's link with the list is broken now.
-        goto JUMP_HERE; // Just to avoid writing the output statement twice
+        if (head->next) { // head->next != NULL implies, there exists a element/node after head (i.e. a second element/node)
+            Node *temp = head->next; // Creating a variable to store the address of 'head-next' temporarily
+            delete head; // Deleting 'head' deletes the first element (Or, element at position == 1)
+            // Setting up the new 'head'
+            head = temp;
+            head->prev = NULL;
+            // Freeing the memory-space allocated to the temporary variable
+            temp = NULL;
+            delete temp;
+        }
+        else {
+            delete head; // Deleting 'head' deletes the first element (Or, element at position == 1)
+            //Resetting the list
+            head = NULL;
+            tail = NULL;
+        }
     }
     // If the element/node is at a position > 1
     else {
         Node *i = head; // Local pointer variable to store address temporarily
         long count = 1; // Stores the "index" of the current element/node (denoted by 'i')
-        for ( ; count < pos-1 ; i = i->next, count++); // Loop, to move 'i' to exactly 1 position behind the desired node (which is to be deleted)
-        delete i->next; // Deleting 'i->next' - the element, required to be deleted
-        i->next = i->next->next; // Setting 'i->next' to 'i->next->next' to avoid leaving it "dangling" as well as, to keep the list together (intact)
-        // i->next->next->prev = i; // **** To maintain reverse-traversal linkage
-        goto JUMP_HERE;
+        for ( ; count < pos ; i = i->next, count++); // Loop, to move 'i' to the desired node (which is to be deleted)
+        i->prev->next = i->next; // Setting the preceding node's 'next' pointer to point at the succeeding element in the list
+        if (i->next) // if i->next != NULL (equiv. to pos == "tail's position"), then execute the following...
+            i->next->prev = i->prev; // Setting the following node's 'prev' pointer to point at the preceding element in the list
+        else
+            tail = i->prev; // if i->next == NULL => 'i' is the last node. So, we shift the tail by one node, up the list
+        delete i; // Deleting the required node/element
+        i = NULL; // Setting 'i' to 'NULL' to avoid leaving it "dangling"
     }
-    JUMP_HERE: cout << "\nDeleted an element at position " << pos << "." << endl; // Signifies successful completion of the required operation
+    cout << "\nDeleted an element at position " << pos << "." << endl; // Signifies successful completion of the required operation
 }
 
 //Function, to count the total number of nodes present in the list
@@ -208,6 +228,17 @@ void LinkedList::display() {
     cout << "\nPrinting all the elements in the list ('NULL' represents the ending of the list): \n" << endl;
     for (Node *i = head ; i ; i = i->next) // Standard list-traversal loop
         cout << i->data << " <-> "; // Printing out the elements
-    cout << "NULL" << endl; // Appends a "NULL" at the end to signify the ending of the list
+    cout << "\b\b\b\b-> NULL" << endl; // Appends a "NULL" at the end to signify the ending of the list
+}
+
+void LinkedList::displayRev() {
+    if(!countItems()) {
+        cout << "\nThe list is empty." << endl;
+        return;
+    }
+    cout << "\nPrinting all the elements in reverse order: \n" << endl;
+    for (Node *i = tail ; i ; i = i->prev) // Standard reverse list-traversal loop
+        cout << i->data << " <-> "; // Printing out the elements
+    cout << "\b\b\b\b\u0020\u0020\u0020\u0020" << endl; // To remove the '<->' at the end of the printed-out list
 }
 //End of program-file
