@@ -101,10 +101,13 @@ void LinkedList::insert(long data) {
     // In case, the list is empty
     if (!head) { // if head == NULL; !head != NULL or !head == true
         head = node; // Actual insertion takes place here
-        head->next = NULL;
-        head->prev = tail; // ****
+        // Linking 'head' & 'tail' (They both refer to the same node though)
+        head->next = tail;
+        head->prev = tail;
         tail = head; // Setting 'tail' to 'head', as there's only one node in the list
-        tail->next = head; // ****
+        // CODER'S NOTE: Explicit mention is necessary, as another node (which (might) have had another node as 'next') has been labelled 'tail' now.
+        tail->prev = head;
+        tail->next = head;
     }
     // In case, the list contains at least 1 element
     else {
@@ -112,7 +115,7 @@ void LinkedList::insert(long data) {
         tail->next = node;
         node->prev = tail;
         tail = node; // Shifting 'tail' to the newly inserted node
-        tail->next = head; // ****
+        tail->next = head; // CODER'S NOTE: Explicit mention is necessary, as another node (which (might) have had another node as 'next') has been labelled 'tail' now.
     }
     cout << "\nInserted an element at the end." << endl; // Signifies successful completion of the required operation
 }
@@ -133,7 +136,7 @@ void LinkedList::insertAt(int pos, long data) {
             node->next = head; // Actual insertion takes place here
             head->prev = node;
             head = node; // Setting 'head' to 'node', as the newly inserted node is the first node now
-            head->prev = tail; // ****
+            head->prev = tail; // Linking 'head' with 'tail' to make the list "circular"
             tail->next = head; // Setting 'tail->next' to "newly-created" 'head'
         }
         // Insertion at position > 1
@@ -185,34 +188,38 @@ void LinkedList::deleteAt(int pos) {
     }
     // If the element/node is at position == 1
     else if (pos == 1) {
-        if (head->next) { // head->next != NULL implies, there exists a element/node after head (i.e. a second element/node)
-            Node *temp = head->next; // Creating a variable to store the address of 'head-next' temporarily
-            temp->prev = tail; // Pointing "second" node's 'prev' to 'tail'
-            tail->next = temp; // Pointing 'tail' to the "new" 'head'
-            delete head; // Deleting 'head' deletes the first element (Or, element at position == 1)
-            // Setting up the new 'head'
-            head = temp;
-            // Freeing the memory-space allocated to the temporary variable
-            temp = NULL;
-            delete temp;
-        }
-        else {
-            delete head; // Deleting 'head' deletes the first element (Or, element at position == 1)
-            //Resetting the list
+        Node *temp = head->next; // Creating a variable to store the address of 'head->next' temporarilys
+        if (head == tail) {
+            delete head; // Deleting the first node itself
+            // Resetting the list
             head = NULL;
             tail = NULL;
         }
+        else {
+            temp->prev = tail; // Pointing "second" node's 'prev' to 'tail'
+            tail->next = temp; // Pointing 'tail' to the "new" 'head'
+            delete head; // Deleting 'head' deletes the first element (Or, element at position == 1)
+            head = temp; // Setting up the new 'head'
+        }
+        // Freeing the memory-space allocated to the temporary variable
+        temp = NULL;
+        delete temp;
     }
     // If the element/node is at a position > 1
     else {
         Node *i = head; // Local pointer variable to store address temporarily
         long count = 1; // Stores the "index" of the current element/node (denoted by 'i')
         for ( ; count < pos ; i = i->next, count++); // Loop, to move 'i' to the desired node (which is to be deleted)
-        i->prev->next = i->next; // Setting the preceding node's 'next' pointer to point at the succeeding element in the list
-        if (i->next) // if i->next != NULL (equiv. to pos == "tail's position"), then execute the following...
-            i->next->prev = i->prev; // Setting the following node's 'prev' pointer to point at the preceding element in the list
-        else
-            tail = i->prev; // if i->next == NULL => 'i' is the last node. So, we shift the tail by one node, up the list
+        if (i->next == head) { // i.e. if 'i' corresponds to 'tail'
+            i->prev->next = head; // Pointing the second-last node to 'head'
+            head->prev = i->prev; // Linking the new 'tail' with 'head
+            tail = i->prev; // Designating 'i->prev' as the new 'tail'
+        }
+        else {
+            // Setting up links between the 'prev' and 'next' elements(s) to 'i' (the current element)
+            i->prev->next = i->next;
+            i->next->prev = i->prev;
+        }
         delete i; // Deleting the required node/element
         i = NULL; // Setting 'i' to 'NULL' to avoid leaving it "dangling"
     }
@@ -237,7 +244,7 @@ void LinkedList::display() {
     if (!i) // If head == NULL, !i (same as '!head') returns 1
         cout << "The list is empty." << endl; // When head == NULL, the list has no elements
     else // Case, when the list isn't empty
-        for ( ; i->next != head ; i = i->next) // **** Standard list-traversal loop (Stops, when 'head' is encountered again)
+        for ( ; i->next != head ; i = i->next) // Standard list-traversal loop (Stops, when 'head' is encountered again)
             cout << i->data << " <-> "; // Printing out the elements
     // Appends 'tail' and then head' (again), at the end (if they are != NULL), to highlight the circular nature of the list
     if (tail && head) // If both 'head' and 'tail' are NOT NULL...
