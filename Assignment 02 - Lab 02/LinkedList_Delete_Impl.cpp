@@ -150,7 +150,6 @@ void LinkedList::Delete() {
     else if (head->next == NULL) {
         delete head; // Deleting the first node itself
         head = NULL; // Setting 'head' to NULL resets the list, thereby removing all the nodes
-        goto JUMP_HERE; // Just to avoid writing the output statement twice
     }
     // If the list has >= 2 nodes
     else {
@@ -159,9 +158,8 @@ void LinkedList::Delete() {
         delete i->next; // Deletes the last node from the list
         i->next = NULL; // Setting 'i->next' to NULL to avoid leaving it "dangling"
         tail = i; // The new 'tail' (last node) of the list
-        goto JUMP_HERE; // CODER'S NOTE: Not a very elegant solution, but works fine and doesn't increase the logical complexity by much (Negligible, in fact)
     }
-    JUMP_HERE: cout << "\nDeleted the element at the end." << endl; // Signifies successful completion of the required operation
+    cout << "\nDeleted the element at the end." << endl; // Signifies successful completion of the required operation
 }
 
 // Function, to delete any particular node, existing at a position in the list
@@ -175,7 +173,6 @@ void LinkedList::deleteAt(int pos) {
     else if (pos == 1) {
         delete head; // Deleting 'head' deletes the first element (Or, element at position == 1)
         head = head->next; // Shifting 'head' to the 'next' node in the list -> The first element's link with the list is broken now.
-        goto JUMP_HERE; // Just to avoid writing the output statement twice
     }
     // If the element/node is at a position > 1
     else {
@@ -184,9 +181,8 @@ void LinkedList::deleteAt(int pos) {
         for ( ; count < pos-1 ; i = i->next, count++); // Loop, to move 'i' to exactly 1 position behind the desired node (which is to be deleted)
         delete i->next; // Deleting 'i->next' - the element, required to be deleted
         i->next = i->next->next; // Setting 'i->next' to 'i->next->next' to avoid leaving it "dangling" as well as, to keep the list together (intact)
-        goto JUMP_HERE;
     }
-    JUMP_HERE: cout << "\nDeleted an element at position " << pos << "." << endl; // Signifies successful completion of the required operation
+    cout << "\nDeleted an element at position " << pos << "." << endl; // Signifies successful completion of the required operation
 }
 
 //Function, to count the total number of nodes present in the list
