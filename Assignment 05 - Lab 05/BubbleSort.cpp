@@ -42,7 +42,6 @@ class LinkedList {
         }
         // cout << "\nInserted an element at the end." << endl; // Signifies successful completion of the required operation
     }
-
 };
 
 class BubbleSort {
