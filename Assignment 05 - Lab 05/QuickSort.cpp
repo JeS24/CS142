@@ -22,14 +22,10 @@ class QuickSort {
         int i = (low - 1);  // Index of smaller element
     
         for (int j = low; j <= high-1; j++)
-        {
-            // If current element <= pivot
-            if (arr[j] <= pivot)
-            {
+            if (arr[j] <= pivot) { // if current element <= pivot
                 i++;    // Incrementing index of smaller element
                 swap(&arr[i], &arr[j]);
             }
-        }
         swap(&arr[i + 1], &arr[high]);
         return (i + 1);
     }
