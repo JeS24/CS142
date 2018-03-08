@@ -1,0 +1,114 @@
+
+Original Array: 
+
+PRINTING Array: 
+2342 5 1212 2341 
+INSIDE mergeSort(): count = 1
+
+PRINTING Array: 
+2342 5 1212 2341 
+m = 2
+
+INSIDE mergeSort(): count = 2
+
+PRINTING Array: 
+2342 5 1212 2341 
+m = 1
+
+INSIDE mergeSort(): count = 3
+
+PRINTING Array: 
+2342 5 1212 2341 
+m = 0
+
+INSIDE mergeSort(): count = 4
+
+PRINTING Array: 
+2342 5 1212 2341 
+m = 0
+
+CONTROL CAME HERE, AT THE END OF mergeSort()
+
+CONTROL CAME HERE, BEFORE mergeSort()
+
+INSIDE mergeSort(): count = 5
+
+PRINTING Array: 
+2342 5 1212 2341 
+m = 1
+
+CONTROL CAME HERE, AT THE END OF mergeSort()
+
+CONTROL CAME HERE, BEFORE merge()
+
+INSIDE merge(): 
+
+PRINTING Array: 
+5 2342 1212 2341 
+CONTROL CAME HERE, AT THE END OF mergeSort()
+
+CONTROL CAME HERE, BEFORE mergeSort()
+
+INSIDE mergeSort(): count = 6
+
+PRINTING Array: 
+5 2342 1212 2341 
+m = 2
+
+CONTROL CAME HERE, AT THE END OF mergeSort()
+
+CONTROL CAME HERE, BEFORE merge()
+
+INSIDE merge(): 
+
+PRINTING Array: 
+5 1212 2342 2341 
+CONTROL CAME HERE, AT THE END OF mergeSort()
+
+CONTROL CAME HERE, BEFORE mergeSort()
+
+INSIDE mergeSort(): count = 7
+
+PRINTING Array: 
+5 1212 2342 2341 
+m = 3
+
+INSIDE mergeSort(): count = 8
+
+PRINTING Array: 
+5 1212 2342 2341 
+m = 3
+
+CONTROL CAME HERE, AT THE END OF mergeSort()
+
+CONTROL CAME HERE, BEFORE mergeSort()
+
+INSIDE mergeSort(): count = 9
+
+PRINTING Array: 
+5 1212 2342 2341 
+m = 4
+
+CONTROL CAME HERE, AT THE END OF mergeSort()
+
+CONTROL CAME HERE, BEFORE merge()
+
+INSIDE merge(): 
+
+PRINTING Array: 
+5 1212 2342 2341 
+CONTROL CAME HERE, AT THE END OF mergeSort()
+
+CONTROL CAME HERE, BEFORE merge()
+
+INSIDE merge(): 
+
+PRINTING Array: 
+5 1212 2341 2342 
+CONTROL CAME HERE, AT THE END OF mergeSort()
+
+Sorted array: 
+
+PRINTING Array: 
+5 1212 2341 2342 
+
