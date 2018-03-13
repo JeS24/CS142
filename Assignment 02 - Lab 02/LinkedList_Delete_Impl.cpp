@@ -32,6 +32,7 @@ class LinkedList {
         void Delete();
         void deleteAt(int pos);
         long countItems();
+        void rev();
         void display();
 };
 
@@ -49,7 +50,7 @@ int main()
     short choice = 0; // Stores the 'choice' of the user
     while (true) { // The interface is displayed, until the user selects 'Exit'
         // Displaying options to the user
-        cout << "\nSelect an option:\n\n1. Insert an element at the end\n2. Insert an element at a particular position (*Subject to existence of the list)\n3. Delete the element at the end\n4. Delete the element at a particular position\n5. Query the number of items in the list\n6. Display the List\n7. Exit\n\nYour selection: ";
+        cout << "\nSelect an option:\n\n1. Insert an element at the end\n2. Insert an element at a particular position (*Subject to existence of the list)\n3. Delete the element at the end\n4. Delete the element at a particular position\n5. Query the number of items in the list\n6. Reverse the List\n7. Display the List\n8. Exit\n\nYour selection: ";
         cin >> choice; // Taking input
         switch (choice)
         {
@@ -82,10 +83,11 @@ int main()
             }
             // To output the number of nodes/items, present in the list
             case 5: cout << "\nNumber of items, in the list: " << obj->countItems() << "." << endl; break;
+            case 6: cout << "\nReversing the list..." << endl; obj->rev(); break;
             // Displays the entire list
-            case 6: obj->display(); break;
+            case 7: obj->display(); break;
             // Normal Program Termination
-            case 7: cout << "\nExiting the program...\n" << endl; return 1;
+            case 8: cout << "\nExiting the program...\n" << endl; return 1;
             // In case, the input doesn't lie between 1 to 7 (Case of wrong input)
             default: cout << "\nWrong input! Please enter your choice again!" << endl;
         }
@@ -184,13 +186,30 @@ void LinkedList::deleteAt(int pos) {
     }
     cout << "\nDeleted an element at position " << pos << "." << endl; // Signifies successful completion of the required operation
 }
-
+ 
 //Function, to count the total number of nodes present in the list
 long LinkedList::countItems() {
     long count = 0; // Variable, to store the number of elements/nodes in the list
     for (Node *i = head ; i ; i = i->next) // Standard list-traversal loop
         count++;
     return count; // Returning the required 'count' of items present
+}
+
+/**
+ * Function to Reverse the Linked List || DATE ADDED: 13-03-2018
+ * */
+void LinkedList::rev() {
+    Node *cur = head->next, *nxt;
+    head->next = NULL;
+    tail = head;
+
+    while (cur) {
+        nxt = cur->next;
+        cur->next = head;
+        head = cur;
+        cur = nxt;
+    }
+    cout << "\nReversal completed!" << endl;
 }
 
 // Function, to print out the elements, present inside the nodes of the list
