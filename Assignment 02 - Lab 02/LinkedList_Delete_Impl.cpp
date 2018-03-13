@@ -199,16 +199,22 @@ long LinkedList::countItems() {
  * Function to Reverse the Linked List || DATE ADDED: 13-03-2018
  * */
 void LinkedList::rev() {
-    Node *cur = head->next, *nxt;
+    Node *cur = head->next, *nxt; // Declaring variables for temporary storage of Nodes
+    // Setting 'tail' to 'head'
     head->next = NULL;
     tail = head;
-
+    // Actual reversal takes place here
     while (cur) {
         nxt = cur->next;
         cur->next = head;
-        head = cur;
+        head = cur; // Shifting 'head' by 1 node, in each iteration
         cur = nxt;
     }
+    // Freeing up space, used by temporary variables
+    delete cur;
+    delete nxt;
+    cur = NULL;
+    nxt = NULL;
     cout << "\nReversal completed!" << endl;
 }
 
