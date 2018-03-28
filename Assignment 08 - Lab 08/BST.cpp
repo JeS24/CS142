@@ -19,9 +19,11 @@ class BST {
     BST(): root(NULL), DEPTH(0) {}
     void insert(long val);
     void del(long val);
-    void disp(TreeNode* i); // Should present the user with choices - InOrder, PostOrder, PreOrder <- REMARK : [[MAYBE]] NOT REALLY, 
+    void disp(BST Tree); // Wrapper for several traversal methods
+    void dispInOrder(TreeNode* i); // Should present the user with choices - InOrder, PostOrder, PreOrder <- REMARK : [[MAYBE]] NOT REALLY, 
                  // as the insertion takes a different path, each time
-
+    void dispPreOrder(TreeNode* i);
+    void dispPostOrder(TreeNode* i);
     // To be implemented later      
     void search(long val);
     long getDepth() {
@@ -55,21 +57,54 @@ void BST::insert(long val) {
                     break;
                 }
     }
-
 }
 
 void BST::del(long val) {
 
 }
 
-void BST::disp(TreeNode* i) {
-    // Use Recursion here
-    if (i && (i->lChild || i->rChild)) {
-        disp(i->lChild);
-        disp(i->rChild);
+void BST::disp(BST Tree) {
+    // In case, the tree is empty
+    if (!Tree.root) {
+        cout << "\nThe tree is empty. Nothing to display!\n";
+        return;
     }
-    else
-        cout << i->data << " " << "\n";
+    // Otherwise...
+    short choice;
+    cout << "\nIn what order, do you wish to display the list?\n1. In-order\n2. Pre-order\n3. Post-order\n\nYour selection: ";
+    cin >> choice;
+    switch (choice)
+    {
+        case 1: cout << "Displaying the elements, in \"Inorder\":"; dispInOrder(Tree.root); break;
+        case 2: cout << "Displaying the elements, in \"Pre-order\":"; dispPreOrder(Tree.root); break;
+        case 3: cout << "Displaying the elements, in \"Post-order\":"; dispPostOrder(Tree.root); break;
+        default: cout << "\nERROR: Wrong input! Please try again!";
+    }
+    cout << "\n";
+}
+
+void BST::dispInOrder(TreeNode* i) {
+    if (i) {
+        dispInOrder(i->lChild);
+        cout << i->data << " ";
+        dispInOrder(i->rChild);
+    }
+}
+
+void BST::dispPreOrder(TreeNode* i) {
+    if (i) {
+        cout << i->data << " ";
+        dispPreOrder(i->lChild);
+        dispPreOrder(i->rChild);
+    }
+}
+
+void BST::dispPostOrder(TreeNode* i) {
+    if (i) {
+        dispPostOrder(i->lChild);
+        dispPostOrder(i->rChild);
+        cout << i->data << " ";
+    }
 }
 
 int main()
@@ -79,7 +114,7 @@ int main()
 
     while (true) {
         cout << "\n\n*************BINARY SEARCH TREE*************";
-        cout << "\n1. Insert a value.\n2. Display the Tree (InOrder probably)\n\nYour selection: ";
+        cout << "\n1. Insert a value.\n2. Display the Tree's elements\n3. Exit\n\nYour selection: ";
         cin >> choice;
         switch (choice)
         {
@@ -91,11 +126,8 @@ int main()
                 cout << "\n" << val << " inserted into the Tree.\n";
                 break;
             }
-            case 2: {
-                cout << "\nDisplaying the tree...\n";
-                Tree.disp(Tree.root);
-                break;
-            }
+            case 2: Tree.disp(Tree); break;
+            case 3: return 0; // Exiting the program
             default: cout << "\nERROR: Wrong input! Please try again!";
         }
     }
