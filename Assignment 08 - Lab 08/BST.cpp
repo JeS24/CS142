@@ -14,9 +14,10 @@ class TreeNode {
 class BST {
     public:
         TreeNode* root = NULL;
+        long SIZE;
         long DEPTH;
 
-    BST(): root(NULL), DEPTH(0) {}
+    BST(): root(NULL), SIZE(0), DEPTH(0) {}
     void insert(long val);
     void del(long val);
     void disp(BST Tree); // Wrapper for several traversal methods
@@ -24,7 +25,7 @@ class BST {
     void dispPreOrder(TreeNode* i);
     void dispPostOrder(TreeNode* i);
 
-    long getMedian(TreeNode* i, long n);
+    long getMedian(TreeNode* i);
     // To be implemented later      
     void search(long val);
     long getDepth() {
@@ -58,6 +59,7 @@ void BST::insert(long val) {
                     break;
                 }
     }
+    SIZE++; // Increasing the size of the tree by one, after successful insertion
 }
 
 void BST::del(long val) {
@@ -65,15 +67,15 @@ void BST::del(long val) {
 }
 
 long counter = 0;
-long BST::getMedian(TreeNode* i, long n) {
-    if (counter == n/2) {
+long BST::getMedian(TreeNode* i) {
+    if (counter == SIZE/2) {
         return i->data;
     }
 
     if (i) {
-        getMedian(i->lChild, n);
+        getMedian(i->lChild);
         counter++;
-        getMedian(i->rChild, n);
+        getMedian(i->rChild);
     }
 }
 
@@ -89,9 +91,9 @@ void BST::disp(BST Tree) {
     cin >> choice;
     switch (choice)
     {
-        case 1: cout << "Displaying the elements, in \"Inorder\":"; dispInOrder(Tree.root); break;
-        case 2: cout << "Displaying the elements, in \"Pre-order\":"; dispPreOrder(Tree.root); break;
-        case 3: cout << "Displaying the elements, in \"Post-order\":"; dispPostOrder(Tree.root); break;
+        case 1: cout << "Displaying the elements, in \"Inorder\": "; dispInOrder(Tree.root); break;
+        case 2: cout << "Displaying the elements, in \"Pre-order\": "; dispPreOrder(Tree.root); break;
+        case 3: cout << "Displaying the elements, in \"Post-order\": "; dispPostOrder(Tree.root); break;
         default: cout << "\nERROR: Wrong input! Please try again!";
     }
     cout << "\n";
@@ -128,7 +130,7 @@ int main()
 
     while (true) {
         cout << "\n\n*************BINARY SEARCH TREE*************";
-        cout << "\n1. Insert a value.\n2. Display the Tree's elements\n3. Exit\n\nYour selection: ";
+        cout << "\n1. Insert a value\n2. Display the Tree's elements\n3. Get the median value\n4. Exit\n\nYour selection: ";
         cin >> choice;
         switch (choice)
         {
@@ -141,7 +143,8 @@ int main()
                 break;
             }
             case 2: Tree.disp(Tree); break;
-            case 3: return 0; // Exiting the program
+            case 3: cout << "\nMedian: " << Tree.getMedian(Tree.root); break;
+            case 4: return 0; // Exiting the program
             default: cout << "\nERROR: Wrong input! Please try again!";
         }
     }
