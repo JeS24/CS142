@@ -20,10 +20,11 @@ class BST {
     void insert(long val);
     void del(long val);
     void disp(BST Tree); // Wrapper for several traversal methods
-    void dispInOrder(TreeNode* i); // Should present the user with choices - InOrder, PostOrder, PreOrder <- REMARK : [[MAYBE]] NOT REALLY, 
-                 // as the insertion takes a different path, each time
+    void dispInOrder(TreeNode* i);
     void dispPreOrder(TreeNode* i);
     void dispPostOrder(TreeNode* i);
+
+    long getMedian(TreeNode* i, long n);
     // To be implemented later      
     void search(long val);
     long getDepth() {
@@ -61,6 +62,19 @@ void BST::insert(long val) {
 
 void BST::del(long val) {
 
+}
+
+long counter = 0;
+long BST::getMedian(TreeNode* i, long n) {
+    if (counter == n/2) {
+        return i->data;
+    }
+
+    if (i) {
+        getMedian(i->lChild, n);
+        counter++;
+        getMedian(i->rChild, n);
+    }
 }
 
 void BST::disp(BST Tree) {
