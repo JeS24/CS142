@@ -1,3 +1,10 @@
+/**
+ * BINARY (SEARCH) TREE IMPLEMENTATION
+ * Author: JS
+ * 
+ * Comments:
+ * 1. Variables, which have been declared just above any function, correspond to that function only (even though, they enjoy global scope)
+ */
 
 #include <iostream>
 using namespace std;
@@ -27,6 +34,10 @@ class BST {
 
     long getMedian(TreeNode* i);   
     bool search(long val, TreeNode *i);
+
+    long countNodes(TreeNode* i); // Counts the number of nodes in i's subtree (includes 'i')
+    void rangePrint(long m, long n, TreeNode* i);
+
     // To be implemented later
     long getNodeDepth(long val); // Or, maybe "TreeNode* i" as parameter
 };
@@ -80,6 +91,7 @@ void BST::del(long val) {
 
 }
 
+
 long counter = 0;
 long BST::getMedian(TreeNode* i) {
     if (counter == SIZE/2) {
@@ -92,6 +104,7 @@ long BST::getMedian(TreeNode* i) {
         getMedian(i->rChild);
     }
 }
+
 
 void BST::disp(BST Tree) {
     // In case, the tree is empty
@@ -137,6 +150,68 @@ void BST::dispPostOrder(TreeNode* i) {
     }
 }
 
+long size;
+long BST::countNodes(TreeNode* i) {
+    if (i) {
+        countNodes(i->lChild);
+        size++;
+        countNodes(i->rChild);
+    }
+    return size;
+}
+
+void BST::rangePrint(long m, long n, TreeNode *i) { // Split the functions into 2 -- 
+    if (!i)
+        return;
+    if (i->data <= m) {
+        if (i->data == m)
+            cout << "\n" << i->data;
+        rangePrint(m, n, i->rChild);
+    }
+    else if (i->data >= n) {
+        if (i->data == n)
+            cout << "\n" << i->data;
+        rangePrint(m, n, i->lChild);
+    }
+    else { // if (i->data > m && i->data < n) // For values, lying within the range -- (m, n)
+        rangePrint(i->data, n, i);
+        rangePrint(m, i->data, i);
+    }
+}
+
+// To enable access to certain other functions
+void ExpFeatures(BST Tree)
+{
+    short choice;
+    while (true) {
+        cout << "\n\n*************BINARY SEARCH TREE*************";
+        cout << "\n---------------Other actions---------------";
+        cout << "\n1. Actually count the nodes and print it out\n2. Range Search or Print (Needs 2 inputs -- a Range)\n3. Get the Median value\n4. Exit to Main Menu\n\nYour selection: ";
+        cin >> choice;
+        switch (choice)
+        {
+            case 1: cout << "\nThe Tree has " << Tree.countNodes(Tree.root) << " node(s)."; break;
+            case 2: {
+                long m, n;
+                cout << "\nEnter the value, where the printing begins, 'm': ";
+                cin >> m;
+                cout << "Enter the value, where the printing ends, 'n': ";
+                cin >> n;
+                if (m > n) { // Check for 'm' and 'n'
+                    cout << "\nWrong input! 'n' must be > 'm'!\n";
+                    break;
+                }
+                cout << "\nPrinting values, in the given range... ";
+                Tree.rangePrint(m, n, Tree.root);
+                break;
+            }
+            case 3: cout << "\nMedian: " << Tree.getMedian(Tree.root); break;
+            case 4: return;
+            default: cout << "\nERROR: Wrong input! Please try again!";
+        }
+    }
+}
+
 int main()
 {
     short choice;
@@ -145,7 +220,7 @@ int main()
 
     while (true) {
         cout << "\n\n*************BINARY SEARCH TREE*************";
-        cout << "\n1. Insert a value\n2. Display the Tree's elements\n3. Search for an element\n4. Get the size of the Tree\n5. Get the median value\n6. Exit\n\nYour selection: ";
+        cout << "\n1. Insert a value\n2. Display the Tree's elements\n3. Search for an element\n4. Get the size of the Tree\n5. Other actions (Opens another menu)\n6. Exit\n\nYour selection: ";
         cin >> choice;
         switch (choice)
         {
@@ -163,7 +238,7 @@ int main()
                 break;
             }
             case 4: cout << "\nSize of the Tree: " << Tree.SIZE << "\n"; break;
-            case 5: cout << "\nMedian: " << Tree.getMedian(Tree.root); break;
+            case 5: ExpFeatures(Tree); break;
             case 6: return 0; // Exiting the program
             default: cout << "\nERROR: Wrong input! Please try again!";
         }
