@@ -16,9 +16,8 @@ class BST {
     public:
         TreeNode* root = NULL;
         long SIZE;
-        long DEPTH;
 
-    BST(): root(NULL), SIZE(0), DEPTH(0) {}
+    BST(): root(NULL), SIZE(0) {}
     void insert(long val);
     void del(long val);
     void disp(BST Tree); // Wrapper for several traversal methods
@@ -26,13 +25,10 @@ class BST {
     void dispPreOrder(TreeNode* i);
     void dispPostOrder(TreeNode* i);
 
-    long getMedian(TreeNode* i);
-    // To be implemented later      
-    void search(long val);
-    long getDepth() {
-        return DEPTH;
-    }
-    long getDepth(long val);
+    long getMedian(TreeNode* i);   
+    bool search(long val, TreeNode *i);
+    // To be implemented later
+    long getNodeDepth(long val); // Or, maybe "TreeNode* i" as parameter
 };
 
 void BST::insert(long val) {
@@ -51,7 +47,7 @@ void BST::insert(long val) {
                     i->rChild = temp;
                     break;
                 }
-            else
+            else if (val < i->data)
                 if (i->lChild)
                     i = i->lChild;
                 else {
@@ -59,8 +55,24 @@ void BST::insert(long val) {
                     i->lChild = temp;
                     break;
                 }
+            else {
+                cout << "\nElement already present in the Tree.\n";
+                break;
+            }
     }
     SIZE++; // Increasing the size of the tree by one, after successful insertion
+}
+
+bool search(long val, TreeNode* i) { // **** WOULD LIKE TO ANALYZE THIS
+    if (!i) // Case of empty Tree
+        return false;
+    
+    if (val == i->data)
+        return true;
+    else if (val < i->data)
+        search(val, i->lChild);
+    else if (i->data > i->data)
+        search(val, i->rChild);
 }
 
 void BST::del(long val) {
@@ -127,16 +139,16 @@ void BST::dispPostOrder(TreeNode* i) {
 int main()
 {
     short choice;
+    long val;
     BST Tree;
 
     while (true) {
         cout << "\n\n*************BINARY SEARCH TREE*************";
-        cout << "\n1. Insert a value\n2. Display the Tree's elements\n3. Get the median value\n4. Exit\n\nYour selection: ";
+        cout << "\n1. Insert a value\n2. Display the Tree's elements\n3. Search for an element\n4. Get the size of the Tree\n5. Get the median value\n6. Exit\n\nYour selection: ";
         cin >> choice;
         switch (choice)
         {
             case 1: {
-                long val;
                 cout << "\nEnter a value, to be inserted: ";
                 cin >> val;
                 Tree.insert(val);
@@ -144,8 +156,15 @@ int main()
                 break;
             }
             case 2: Tree.disp(Tree); break;
-            case 3: cout << "\nMedian: " << Tree.getMedian(Tree.root); break;
-            case 4: return 0; // Exiting the program
+            case 3: {
+                cout << "\nEnter the value, to be searched: ";
+                cin >> val;
+                cout << "\n" << val << " is " << ((search(val, Tree.root))?"present.\n":"absent.\n");
+                break;
+            }
+            case 4: cout << "\nSize of the Tree: " << Tree.SIZE << "\n"; break;
+            case 5: cout << "\nMedian: " << Tree.getMedian(Tree.root); break;
+            case 6: return 0; // Exiting the program
             default: cout << "\nERROR: Wrong input! Please try again!";
         }
     }
