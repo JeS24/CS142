@@ -57,21 +57,22 @@ void BST::insert(long val) {
                 }
             else {
                 cout << "\nElement already present in the Tree.\n";
-                break;
+                return;
             }
     }
     SIZE++; // Increasing the size of the tree by one, after successful insertion
+    cout << "\n" << val << " inserted into the Tree.\n";
 }
 
 bool search(long val, TreeNode* i) { // **** WOULD LIKE TO ANALYZE THIS
-    if (!i) // Case of empty Tree
+    if (!i) // Case of empty Tree (Recursively) -- When a leaf has been reached and the value is yet to be found -- return false.
         return false;
     
     if (val == i->data)
         return true;
     else if (val < i->data)
         search(val, i->lChild);
-    else if (i->data > i->data)
+    else
         search(val, i->rChild);
 }
 
@@ -152,7 +153,6 @@ int main()
                 cout << "\nEnter a value, to be inserted: ";
                 cin >> val;
                 Tree.insert(val);
-                cout << "\n" << val << " inserted into the Tree.\n";
                 break;
             }
             case 2: Tree.disp(Tree); break;
