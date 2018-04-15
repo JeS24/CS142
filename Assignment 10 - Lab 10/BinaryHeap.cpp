@@ -43,7 +43,7 @@ void H::insert(long val) {
     heap.push_back(val); // Inserting at the back of the vector
 
     long i = heap.size()-1;
-    while (i && heap[i] < heap[parent(i)]) {
+    while (i != 0 && heap[i] > heap[parent(i)]) {
         swap(&heap[i], &heap[parent(i)]);
         i = parent(i);
     }
@@ -62,9 +62,9 @@ void H::heapify(long i) {
     long l = 2*i + 1;
     long r = 2*i + 2;
     long biggest = i;
-    if (l < heap.size() && heap[l] < heap[i])
+    if (l < heap.size() && heap[l] > heap[i])
         biggest = l;
-    if (r < heap.size() && heap[r] < heap[biggest])
+    if (r < heap.size() && heap[r] > heap[biggest])
         biggest = r;
     if (biggest != i)
     {
@@ -80,7 +80,7 @@ int main()
     short choice;
     while (true) {
         cout << "\nBINARY HEAP DATA STRUCTURE\n";
-        cout << "\n1. Insert an element\n2. Delete the Root Key (Element) from the heap\n3. Exit\n\nYour selection: ";
+        cout << "\n1. Insert an element\n2. Delete the Root Key (Element) from the heap\n3. Display the Heap\n4. Exit\n\nYour selection: ";
         cin >> choice;
         switch (choice)
         {
@@ -102,7 +102,14 @@ int main()
                     cout << "\nRoot Key " << h.delRoot() << " was deleted from the heap.\n";
                 break;
             }
-            case 3: return 0;
+            case 3: {
+                cout << "\nDisplaying the heap: \n";
+                for (auto i : h.heap)
+                    cout << i << "\n";
+                cout << "\n";
+                break;
+            }
+            case 4: return 0;
             default: cout << "Wrong Input! Please try again!";
         }
     }
