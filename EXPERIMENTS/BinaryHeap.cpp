@@ -50,18 +50,12 @@ void H::insert(long val) {
     cout << "\n" << val << " entered into the Heap.\n";
 }
 
-long delRoot() {
-    
-    else
-        swap(&heap[0], &heap[heap.size()-1]); // Swapping Root Key with the last element
-    
-    if (heap.size() == 1) {
-        prevRoot = heap[0];
-        heap.clear();
-    }
-
+long H::delRoot() { // Called only if heap.size() > 1 || Should make "this" function handle all cases, though
+    long prevRoot = heap[0];
+    swap(&heap[0], &heap[heap.size()-1]); // Swapping Root Key with the last element
+    heap.pop_back(); // Deleting the previous Root Key
     heapify(0);
-    cout << "\n" << val << " entered into the Heap.\n";
+    return prevRoot;
 }
 
 void H::heapify(long i) {
@@ -86,7 +80,7 @@ int main()
     short choice;
     while (true) {
         cout << "\nBINARY HEAP DATA STRUCTURE\n";
-        cout << "\n1. Insert an element\n2. Delete the Root Key (Element) from the heap\n\nYour selection: ";
+        cout << "\n1. Insert an element\n2. Delete the Root Key (Element) from the heap\n3. Exit\n\nYour selection: ";
         cin >> choice;
         switch (choice)
         {
@@ -101,16 +95,14 @@ int main()
                 if (h.heap.empty())
                     cout << "\nHeap is empty. Nothing to delete.\n";
                 else if (h.heap.size() == 1) {
-                    cout << "\n"
+                    cout << "Root Key " << h.heap[0] << " was deleted from the heap.\n";
                     h.heap.clear();
                 }
-                else {
-                    long prevRoot = h.delRoot();
-                    if (h.delRoot() > 0)
-                        cout << 
-                }
+                else
+                    cout << "\nRoot Key " << h.delRoot() << " was deleted from the heap.\n";
                 break;
             }
+            case 3: return 0;
             default: cout << "Wrong Input! Please try again!";
         }
     }
