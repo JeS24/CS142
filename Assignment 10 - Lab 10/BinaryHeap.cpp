@@ -15,6 +15,7 @@ class BinaryHeap {
         void heapify(long i);
         void insert(long val);
         long delRoot(); // Or, getMax() -- Returns the Root Key, as well as deletes it.
+        void disp();
 };
 
 typedef BinaryHeap H;
@@ -73,6 +74,17 @@ void H::heapify(long i) {
     }
 }
 
+void H::heapSort(vector <long> v) {
+    
+}
+
+void H::disp() {
+    cout << "\nDisplaying the heap: \n";
+        for (auto i : heap)
+            cout << i << "\n";
+        cout << "\n";
+}
+
 
 int main()
 {
@@ -80,7 +92,7 @@ int main()
     short choice;
     while (true) {
         cout << "\nBINARY HEAP DATA STRUCTURE\n";
-        cout << "\n1. Insert an element\n2. Delete the Root Key (Element) from the heap\n3. Display the Heap\n4. Exit\n\nYour selection: ";
+        cout << "\n1. Insert an element\n2. Delete the Root Key (Element) from the heap\n3. Display the Heap\n4. Enter the elements, and then HeapSort them\n5. Exit\n\nYour selection: ";
         cin >> choice;
         switch (choice)
         {
@@ -92,7 +104,7 @@ int main()
                 break;
             }
             case 2: {
-                if (h.heap.empty())
+                if (h.heap.empty()) // Transfer these checks/conditions to delRoot()
                     cout << "\nHeap is empty. Nothing to delete.\n";
                 else if (h.heap.size() == 1) {
                     cout << "Root Key " << h.heap[0] << " was deleted from the heap.\n";
@@ -102,14 +114,18 @@ int main()
                     cout << "\nRoot Key " << h.delRoot() << " was deleted from the heap.\n";
                 break;
             }
-            case 3: {
-                cout << "\nDisplaying the heap: \n";
-                for (auto i : h.heap)
-                    cout << i << "\n";
-                cout << "\n";
+            case 3: h.disp(); break;
+            case 4: {
+                cout << "\nEnter the elements of the heap [Vector]: \n"; 
+                for (auto val : h.heap) {
+                    cin >> val;
+                    h.insert(val);
+                }
+                h.heapify(0);
+                h.disp();
                 break;
             }
-            case 4: return 0;
+            case 5: return 0;
             default: cout << "Wrong Input! Please try again!";
         }
     }
