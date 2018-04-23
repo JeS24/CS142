@@ -12,9 +12,10 @@ class BinaryHeap {
         long parent(long i);
         // long lChild(long i);
         // long rChild(long i);
-        void heapify(long i);
+        void heapify(long i, long SIZE);
         void insert(long val);
         long delRoot(); // Or, getMax() -- Returns the Root Key, as well as deletes it.
+        void heapSort(); // Implements HeapSort
         void disp();
 };
 
@@ -55,26 +56,32 @@ long H::delRoot() { // Called only if heap.size() > 1 || Should make "this" func
     long prevRoot = heap[0];
     swap(&heap[0], &heap[heap.size()-1]); // Swapping Root Key with the last element
     heap.pop_back(); // Deleting the previous Root Key
-    heapify(0);
+    heapify(0, heap.size());
     return prevRoot;
 }
 
-void H::heapify(long i) {
+void H::heapify(long i, long SIZE) {
     long l = 2*i + 1;
     long r = 2*i + 2;
     long biggest = i;
-    if (l < heap.size() && heap[l] > heap[i])
+    if (l < SIZE && heap[l] > heap[i])
         biggest = l;
-    if (r < heap.size() && heap[r] > heap[biggest])
+    if (r < SIZE && heap[r] > heap[biggest])
         biggest = r;
     if (biggest != i)
     {
         swap(&heap[i], &heap[biggest]);
-        heapify(biggest);
+        heapify(biggest, heap.size());
     }
 }
 
-void H::heapSort(vector <long> v) {
+void H::heapSort() {
+    long j = heap.size();
+    while (j > 1) {
+        swap(&heap[0], &heap[j-1]);
+        heapify(0, j);
+        j--;
+    }
     
 }
 
@@ -92,7 +99,7 @@ int main()
     short choice;
     while (true) {
         cout << "\nBINARY HEAP DATA STRUCTURE\n";
-        cout << "\n1. Insert an element\n2. Delete the Root Key (Element) from the heap\n3. Display the Heap\n4. Enter the elements, and then HeapSort them\n5. Exit\n\nYour selection: ";
+        cout << "\n1. Insert an element\n2. Delete the Root Key (Element) from the Heap\n3. Display the Heap\n4. HeapSort the elements in the Heap\n5. Exit\n\nYour selection: ";
         cin >> choice;
         switch (choice)
         {
@@ -116,12 +123,13 @@ int main()
             }
             case 3: h.disp(); break;
             case 4: {
-                cout << "\nEnter the elements of the heap [Vector]: \n"; 
-                for (auto val : h.heap) {
-                    cin >> val;
-                    h.insert(val);
-                }
-                h.heapify(0);
+                // cout << "\nEnter the elements of the heap [Vector]: \n"; 
+                // for (auto val : h.heap) {
+                //     cin >> val;
+                //     h.insert(val);
+                // }
+                h.heapSort();
+                cout << "\nHeapSorting the elements, in the Heap...\n";
                 h.disp();
                 break;
             }
