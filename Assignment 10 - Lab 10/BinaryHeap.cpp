@@ -71,18 +71,15 @@ void H::heapify(long i, long SIZE) {
     if (biggest != i)
     {
         swap(&heap[i], &heap[biggest]);
-        heapify(biggest, heap.size());
+        heapify(biggest, SIZE);
     }
 }
 
 void H::heapSort() {
-    long j = heap.size();
-    while (j > 1) {
+    for (long j = heap.size() ; j > 1 ; j--) {
         swap(&heap[0], &heap[j-1]);
-        heapify(0, j);
-        j--;
+        heapify(0, j-1);
     }
-    
 }
 
 void H::disp() {
