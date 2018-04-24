@@ -1,5 +1,5 @@
 /**
- * WORKS, IN CONJUGATION WITH "BHeapArr.cpp"
+ * WORKS IN CONJUGATION WITH "BHeapArr.cpp"
  */
 
 #include <iostream>
@@ -8,7 +8,6 @@ using namespace std;
 
 void HeapSort(long arr[], long size) {
     BHeapArr b;
-    // b.heapify(arr, 0, size);
 
     // Building the heap
     for (int i = (size - 2)/2 ; i >= 0 ; i--) // Setting 'i' to (size/2 -1) covers the entire heap, as the maximum reach of any 'i' is (2*i + 2)
