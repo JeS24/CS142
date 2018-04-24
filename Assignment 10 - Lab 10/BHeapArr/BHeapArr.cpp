@@ -41,6 +41,10 @@ void BHeapArr::insert(long val) {
             n = parent(n);
         }
     }
+    else { // If the capacity has been reached
+        cout << "\nMaximum Capacity reached. No space left in the Heap.\n";
+        return;
+    }
     SIZE++;
 }
 
