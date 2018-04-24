@@ -12,11 +12,11 @@ class BinaryHeap {
         long parent(long i);
         // long lChild(long i);
         // long rChild(long i);
-        void heapify(long i, long SIZE);
+        void heapify(vector <long> h, long i, long SIZE);
         void insert(long val);
         long delRoot(); // Or, getMax() -- Returns the Root Key, as well as deletes it.
-        void heapSort(); // Implements HeapSort
-        void disp();
+        void heapSort(vector <long> h); // Implements HeapSort
+        void disp(vector <long> h);
 };
 
 typedef BinaryHeap H;
@@ -56,35 +56,35 @@ long H::delRoot() { // Called only if heap.size() > 1 || Should make "this" func
     long prevRoot = heap[0];
     swap(&heap[0], &heap[heap.size()-1]); // Swapping Root Key with the last element
     heap.pop_back(); // Deleting the previous Root Key
-    heapify(0, heap.size());
+    heapify(heap, 0, heap.size());
     return prevRoot;
 }
 
-void H::heapify(long i, long SIZE) {
+void H::heapify(vector <long> h, long i, long SIZE) {
     long l = 2*i + 1;
     long r = 2*i + 2;
     long biggest = i;
-    if (l < SIZE && heap[l] > heap[i])
+    if (l < SIZE && h[l] > h[i])
         biggest = l;
-    if (r < SIZE && heap[r] > heap[biggest])
+    if (r < SIZE && h[r] > h[biggest])
         biggest = r;
     if (biggest != i)
     {
-        swap(&heap[i], &heap[biggest]);
-        heapify(biggest, SIZE);
+        swap(&h[i], &h[biggest]);
+        heapify(h, biggest, SIZE);
     }
 }
 
-void H::heapSort() {
-    for (long j = heap.size() ; j > 1 ; j--) {
-        swap(&heap[0], &heap[j-1]);
-        heapify(0, j-1);
+void H::heapSort(vector <long> h) {
+    for (long j = h.size() ; j > 1 ; j--) {
+        swap(&h[0], &h[j-1]);
+        heapify(h, 0, j-1);
     }
 }
 
-void H::disp() {
+void H::disp(vector <long> h) {
     cout << "\nDisplaying the heap: \n";
-        for (auto i : heap)
+        for (auto i : h)
             cout << i << "\n";
         cout << "\n";
 }
@@ -118,16 +118,17 @@ int main()
                     cout << "\nRoot Key " << h.delRoot() << " was deleted from the heap.\n";
                 break;
             }
-            case 3: h.disp(); break;
+            case 3: h.disp(h.heap); break;
             case 4: {
-                // cout << "\nEnter the elements of the heap [Vector]: \n"; 
-                // for (auto val : h.heap) {
-                //     cin >> val;
-                //     h.insert(val);
-                // }
-                h.heapSort();
+                cout << "\nEnter the elements of the heap [Vector] (Enter '0' to finish): \n";
+                vector <long> h1;
+                long val;
+                while (cin >> val && val != 0)
+                    h1.push_back(val);
+                cout << "SIZE = " << h1.size() << endl;
                 cout << "\nHeapSorting the elements, in the Heap...\n";
-                h.disp();
+                h.heapSort(h1); // Invoking h1's heapSort function to sort the entered values
+                h.disp(h1); // REALLY STUPID WAY OF HANDLING STUFF, RELATED TO HEAPSORT - ALL THESE vector ARGUMENTS
                 break;
             }
             case 5: return 0;
