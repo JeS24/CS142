@@ -1,5 +1,5 @@
 /**
- * WORKS IN CONJUGATION WITH "BHeapArr.cpp"
+ * WORKS IN CONJUGATION WITH "BHeapArr.cpp" -- Makes use of heapify(), from BHeapArr
  */
 
 #include <iostream>
